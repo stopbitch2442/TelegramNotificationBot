@@ -8,7 +8,6 @@ class Program
         var myself = await client.LoginUserIfNeeded();
         Console.WriteLine($"We are logged-in as {myself} (id {myself.id})");
 
-        //    await ScheduleMessage.SomeSendScheduleMessage(client);
-        await GetChatList.GetChatListParticipants(client);
+        await CommandList.ShowCommandList(client);
     }
 }

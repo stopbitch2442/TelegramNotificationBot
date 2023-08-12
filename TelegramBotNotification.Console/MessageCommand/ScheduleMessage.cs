@@ -10,34 +10,35 @@ public class ScheduleMessage
 {
     public static async Task SendScheduleMessage(Client client) // Запланировать отправку уведомления
     {
-        await Console.Out.WriteLineAsync("Введи ник, кому необходимо отправить сообщение:");
-        string username = await Console.In.ReadLineAsync();
+        Console.WriteLine("Введи ник, кому необходимо отправить сообщение:");
+        string username = Console.ReadLine();
         var resolved = await client.Contacts_ResolveUsername(username); // никнейм без @
-        await Console.Out.WriteLineAsync("Введите через сколько минут отправить сообщение, например - 40"); // в минутах
-        string time = await Console.In.ReadLineAsync();
+        Console.Write("Введите через сколько минут отправить сообщение, например - 40"); // в минутах
+        string time = Console.ReadLine();
         DateTime when = DateTime.UtcNow.AddMinutes(Convert.ToInt32(time));
-        await Console.Out.WriteLineAsync("Введите текст, который хотите отправить:");
-        string messagetext = await Console.In.ReadLineAsync();
-        await client.SendMessageAsync(resolved, messagetext, schedule_date: when);
+        Console.WriteLine("Введите текст, который хотите отправить:");
+        string messagetext = Console.ReadLine();
+        client.SendMessageAsync(resolved, messagetext, schedule_date: when).GetAwaiter().GetResult();
     }
-    public static async Task SomeSendScheduleMessage(Client client) // Запланировать отправку нескольких уведомлений
+    public static Task SomeSendScheduleMessage(Client client) // Запланировать отправку нескольких уведомлений
     {
-        await Console.Out.WriteLineAsync("Введи ник, кому необходимо отправить сообщение:");
-        string username = await Console.In.ReadLineAsync();
-        var resolved = await client.Contacts_ResolveUsername(username); // никнейм без @
-        await Console.Out.WriteLineAsync("Введите интервал сообщений, например - 1440"); // в минутах
-        string time = await Console.In.ReadLineAsync();
+        Console.WriteLine("Введи ник, кому необходимо отправить сообщение:");
+        string username = Console.ReadLine();
+        var resolved = client.Contacts_ResolveUsername(username).GetAwaiter().GetResult(); // никнейм без @
+        Console.Write("Введите интервал сообщений, например - 1440\n"); // в минутах
+        string time = Console.ReadLine();
         DateTime when = DateTime.UtcNow.AddMinutes(Convert.ToInt32(time));
-        await Console.Out.WriteLineAsync("Введите текст, который хотите отправить:");
-        string messagetext = await Console.In.ReadLineAsync();
-        await Console.Out.WriteLineAsync("Введите сколько раз вы хотите отправить сообщение:");
-        string howmanytimes = await Console.In.ReadLineAsync();
+        Console.Write("Введите текст, который хотите отправить:");
+        string messagetext = Console.ReadLine();
+        Console.Write("Введите сколько раз вы хотите отправить сообщение:");
+        string howmanytimes = Console.ReadLine();
         int howmany = Convert.ToInt32(howmanytimes);
         for (int i = 0; i < howmany; i++)
         {
-            await client.SendMessageAsync(resolved, messagetext, schedule_date: when);
+            client.SendMessageAsync(resolved, messagetext, schedule_date: when).GetAwaiter().GetResult();
             when = when.AddMinutes(Convert.ToInt32(time));
         }
+        return Task.CompletedTask;
     }
 }
 

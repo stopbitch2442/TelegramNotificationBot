@@ -9,28 +9,28 @@ using WTelegram;
 
 public class NowSendMessage
 {
-    public static async Task SendMessage(Client client) // Отправить сообщение
+    public static void SendMessage(Client client) // Отправить сообщение
     {
-        await Console.Out.WriteLineAsync("Введи ник, кому необходимо отправить сообщение:");
-        string username = await Console.In.ReadLineAsync();
-        var resolved = await client.Contacts_ResolveUsername(username); // никнейм без @
-        await Console.Out.WriteLineAsync("Введите текст, который хотите отправить:");
-        string messagetext = await Console.In.ReadLineAsync();
-        await client.SendMessageAsync(resolved, messagetext);
+        Console.WriteLine("Введи ник, кому необходимо отправить сообщение:");
+        string username = Console.ReadLine();
+        var resolved = client.Contacts_ResolveUsername(username).GetAwaiter().GetResult(); // никнейм без @
+        Console.WriteLine("Введите текст, который хотите отправить:");
+        string messagetext = Console.ReadLine();
+        client.SendMessageAsync(resolved, messagetext).GetAwaiter().GetResult();
     }
-    public static async Task SomeSendMessage(Client client) // Отправить несколько сообщений
+    public static void SomeSendMessage(Client client) // Отправить несколько сообщений
     {
-        await Console.Out.WriteLineAsync("Введи ник, кому необходимо отправить сообщение:");
-        string username = await Console.In.ReadLineAsync();
-        var resolved = await client.Contacts_ResolveUsername(username); // никнейм без @
-        await Console.Out.WriteLineAsync("Введите текст, который хотите отправить:");
-        string messagetext = await Console.In.ReadLineAsync();
-        await Console.Out.WriteLineAsync("Введите сколько раз вы хотите отправить сообщение:");
-        string howmanytimes = await Console.In.ReadLineAsync();
+        Console.WriteLine("Введи ник, кому необходимо отправить сообщение:");
+        string username = Console.ReadLine();
+        var resolved = client.Contacts_ResolveUsername(username).GetAwaiter().GetResult(); // никнейм без @
+        Console.WriteLine("Введите текст, который хотите отправить:");
+        string messagetext = Console.ReadLine();
+        Console.WriteLine("Введите сколько раз вы хотите отправить сообщение:");
+        string howmanytimes = Console.ReadLine();
         int howmany = Convert.ToInt32(howmanytimes);
         for (int i = 0; i < howmany; i++)
         {
-            await client.SendMessageAsync(resolved, messagetext);
+            client.SendMessageAsync(resolved, messagetext).GetAwaiter().GetResult();
         }
     }
 }
