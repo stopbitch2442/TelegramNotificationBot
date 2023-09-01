@@ -20,24 +20,31 @@ public class ScheduleMessage
         string messagetext = Console.ReadLine();
         client.SendMessageAsync(resolved, messagetext, schedule_date: when).GetAwaiter().GetResult();
     }
-    public static Task SomeSendScheduleMessage(Client client) // Запланировать отправку нескольких уведомлений
+    public static Task SomeSendScheduleMessage(Client client) // Запланировать отправку нескольких уведомления
     {
         Console.WriteLine("Введи ник, кому необходимо отправить сообщение:");
         string username = Console.ReadLine();
-        var resolved = client.Contacts_ResolveUsername(username).GetAwaiter().GetResult(); // никнейм без @
+        var resolved = client.Contacts_ResolveUsername(username).GetAwaiter().GetResult();
+
         Console.Write("Введите интервал сообщений, например - 1440\n"); // в минутах
         string time = Console.ReadLine();
-        DateTime when = DateTime.UtcNow.AddMinutes(Convert.ToInt32(time));
         Console.Write("Введите текст, который хотите отправить:");
         string messagetext = Console.ReadLine();
         Console.Write("Введите сколько раз вы хотите отправить сообщение:");
         string howmanytimes = Console.ReadLine();
         int howmany = Convert.ToInt32(howmanytimes);
+
+        Console.Write("Введите через сколько отправить первое сообщение (в минутах):");
+        string delay = Console.ReadLine();
+        int delayInMinutes = Convert.ToInt32(delay);
+        DateTime when = DateTime.UtcNow.AddMinutes(delayInMinutes);
+
         for (int i = 0; i < howmany; i++)
         {
             client.SendMessageAsync(resolved, messagetext, schedule_date: when).GetAwaiter().GetResult();
             when = when.AddMinutes(Convert.ToInt32(time));
         }
+
         return Task.CompletedTask;
     }
 }
